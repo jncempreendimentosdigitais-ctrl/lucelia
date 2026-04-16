@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Leadership Internal Block Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #171717;
+    --border: #222222;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.12);
+    --text: #e8e4dc;
+    --text-muted: #7a7570;
+    --text-dim: #4a4540;
+    --accent: #c9a84c;
+    --danger: #8b3a3a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 660px;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp 0.5s ease both; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── INTRO ── */
+  .brand-line {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    opacity: 0.4;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .subheadline {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .intro-box {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    margin-bottom: 48px;
+    background: var(--surface);
+  }
+
+  .intro-box p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.7;
+    color: #c8c0b0;
+  }
+
+  .intro-box .note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    color: var(--text-dim);
+    margin-top: 16px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  .progress-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .progress-count {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--gold);
+  }
+  .progress-bar-track {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .progress-bar-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.5s ease;
+  }
+
+  /* ── QUESTION ── */
+  .question-number {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .question-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 300;
+    line-height: 1.35;
+    margin-bottom: 36px;
+    color: var(--text);
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 22px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .option::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold-dim);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .option:hover { border-color: rgba(201,168,76,0.4); }
+  .option:hover::before { opacity: 1; }
+  .option.selected {
+    border-color: var(--gold);
+    background: var(--surface2);
+  }
+  .option.selected::before { opacity: 1; }
+
+  .option-letter {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+  .option.selected .option-letter {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+  }
+
+  .option-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+  .option.selected .option-text { color: var(--text); }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--gold);
+    color: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 40px;
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+    gap: 18px;
+  }
+  .btn-primary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    gap: 12px;
+  }
+  .btn-primary svg { width: 16px; height: 16px; }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 16px;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+
+  /* ── CAPTURE FORM ── */
+  .capture-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .capture-header .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .lock-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    color: var(--gold);
+  }
+
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .form-group input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: rgba(201,168,76,0.5); }
+  .form-group input::placeholder { color: var(--text-dim); }
+
+  .invest-question {
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 28px;
+    margin: 32px 0;
+    background: var(--surface2);
+  }
+  .invest-question p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .invest-opts { display: flex; gap: 12px; }
+  .invest-btn {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .invest-btn:hover { border-color: var(--gold); color: var(--text); }
+  .invest-btn.selected { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+  .privacy-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── RESULT ── */
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 8px 20px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  .result-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+
+  .result-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--gold-light);
+    margin-bottom: 36px;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    opacity: 0.3;
+    margin: 36px 0;
+  }
+
+  .insight-block {
+    margin-bottom: 28px;
+  }
+  .insight-block h3 {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .insight-block p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #a09890;
+    font-weight: 300;
+  }
+
+  .warning-box {
+    border: 1px solid rgba(139,58,58,0.4);
+    border-left: 3px solid var(--danger);
+    padding: 20px 24px;
+    background: rgba(139,58,58,0.06);
+    margin: 28px 0;
+  }
+  .warning-box p {
+    font-size: 14px;
+    color: #c08080;
+    line-height: 1.65;
+  }
+
+  .cta-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding: 36px 32px;
+    margin-top: 40px;
+    text-align: center;
+  }
+  .cta-section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .cta-section p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .cta-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 16px;
+  }
+
+  /* ── WEAK LEAD RESULT ── */
+  .neutral-box {
+    border: 1px solid var(--border);
+    padding: 28px;
+    text-align: center;
+  }
+  .neutral-box h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .neutral-box p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 480px) {
+    .invest-opts { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- ═══════════════════════════════════════════════════
+       SCREEN 0 — INTRO
+  ════════════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-intro">
+    <div class="brand-line">Confidential Diagnostic</div>
+
+    <h1>Leadership<br><em>Internal Block</em><br>Assessment</h1>
+    <p class="subheadline">Discover what is silently limiting your growth as a leader.</p>
+
+    <div class="intro-box">
+      <p>This is not a personality test.<br>
+      This is a diagnostic designed for business owners, executives and entrepreneurs who feel internally blocked despite their potential.</p>
+      <p class="note">If you're just curious, this is not for you.</p>
+    </div>
+
+    <button class="btn-primary" onclick="goTo('q', 0)">
+      Start Assessment
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SCREENS 1–6 — QUESTIONS  (generated by JS)
+  ════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-questions">
+    <div class="progress-header">
+      <span class="progress-label">Assessment Progress</span>
+      <span class="progress-count" id="q-counter">1 / 6</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <div id="question-area"></div>
+
+    <button class="btn-primary" id="btn-next" disabled onclick="nextQuestion()">
+      Continue
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SCREEN — LEAD CAPTURE
+  ════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-capture">
+    <div class="capture-header">
+      <div class="eyebrow">Your Diagnostic is Complete</div>
+      <div class="lock-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h1 style="font-size: clamp(26px,5vw,40px); margin-bottom:12px;">Your results<br><em>are ready.</em></h1>
+      <p class="subheadline" style="max-width:420px; margin:0 auto;">Enter your details to see what is really blocking your growth.</p>
+    </div>
+
+    <div class="form-group">
+      <label>First Name</label>
+      <input type="text" id="field-name" placeholder="Your first name"/>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="field-email" placeholder="your@email.com"/>
+    </div>
+    <div class="form-group">
+      <label>Phone (WhatsApp)</label>
+      <input type="tel" id="field-phone" placeholder="+1 (000) 000-0000"/>
+    </div>
+
+    <div class="invest-question">
+      <p>"Are you open to investing in solving this if you identify a real problem?"</p>
+      <div class="invest-opts">
+        <button class="invest-btn" id="invest-yes" onclick="selectInvest('yes')">Yes</button>
+        <button class="invest-btn" id="invest-no"  onclick="selectInvest('no')">No</button>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="submitCapture()" style="width:100%; justify-content:center;">
+      See My Results
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <p class="privacy-note">Your information is private and will never be shared.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SCREEN — RESULT (strong lead)
+  ════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-result">
+    <div class="result-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Diagnostic Report
+    </div>
+
+    <h2 class="result-title" id="result-title">You Are Operating<br>Below Your Ceiling.</h2>
+    <p class="result-subtitle" id="result-subtitle">And the ceiling is not external.</p>
+
+    <div class="divider"></div>
+
+    <div class="insight-block">
+      <h3>What We Found</h3>
+      <p id="result-finding">Your answers reveal a pattern common among high-performing leaders: the bottleneck is not strategy, not market, not team — it is internal. Unresolved decision fatigue, emotional overload, and cognitive noise are consuming the bandwidth you need to lead at your highest level.</p>
+    </div>
+
+    <div class="insight-block">
+      <h3>The Hidden Cost</h3>
+      <p id="result-cost">Every day you operate in this state, you are leaving decisions on the table, losing influence in the room, and slowly eroding the clarity that built your success in the first place. This is not a motivation problem. It is a system problem — and systems can be resolved.</p>
+    </div>
+
+    <div id="warning-area"></div>
+
+    <div class="divider"></div>
+
+    <div class="cta-section">
+      <h3>The Next Step</h3>
+      <p>A private diagnostic session is available for leaders who are ready to identify the exact block and design a resolution path — before investing in any program or methodology.</p>
+      <button class="btn-primary" style="margin-top:0;" onclick="alert('CTA action: redirect to booking / sales page')">
+        Request a Private Session
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <p class="cta-note">Limited availability · No commitment required</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SCREEN — WEAK LEAD (answered "No" to invest)
+  ════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-weak">
+    <div class="neutral-box">
+      <h2>Thank you for your honesty.</h2>
+      <p style="margin-top:16px;">Your results point to real internal blocks — but meaningful change requires genuine commitment.<br><br>When you're ready to take that step, this assessment will still be here.</p>
+    </div>
+    <button class="btn-ghost" onclick="location.reload()">Retake Assessment</button>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+const questions = [
+  {
+    text: "How do you usually make important decisions?",
+    options: [
+      "Quickly, but often under pressure",
+      "I overthink and delay decisions",
+      "I feel mentally exhausted when deciding",
+      "I avoid decisions until necessary"
+    ]
+  },
+  {
+    text: "Which best describes your current internal state?",
+    options: [
+      "Constant mental overload",
+      "Emotional ups and downs",
+      "Lack of clarity",
+      "I feel disconnected from myself"
+    ]
+  },
+  {
+    text: "What impacts your leadership the most today?",
+    options: [
+      "Stress and pressure",
+      "Lack of focus",
+      "Difficulty managing emotions",
+      "Feeling stuck despite growth"
+    ]
+  },
+  {
+    text: "How do you feel at the end of most days?",
+    options: [
+      "Drained",
+      "Mentally overloaded",
+      "Frustrated with lack of progress",
+      "Disconnected"
+    ]
+  },
+  {
+    text: "Do you feel you're operating at your full potential?",
+    options: [
+      "Yes",
+      "Not consistently",
+      "No",
+      "I know I could be doing much more"
+    ]
+  },
+  {
+    text: "What do you believe is the root of your current challenges?",
+    options: [
+      "External factors",
+      "Lack of strategy",
+      "Internal patterns",
+      "I'm not sure"
+    ]
+  }
+];
+
+const LETTERS = ['A','B','C','D'];
+let currentQ = 0;
+let answers = [];
+let investAnswer = null;
+
+function goTo(target, idx) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  if (target === 'q') {
+    currentQ = idx;
+    renderQuestion();
+    document.getElementById('screen-questions').classList.add('active');
+  } else {
+    document.getElementById('screen-' + target).classList.add('active');
+  }
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const total = questions.length;
+
+  document.getElementById('q-counter').textContent = (currentQ + 1) + ' / ' + total;
+  document.getElementById('progress-fill').style.width = (currentQ / total * 100) + '%';
+
+  const area = document.getElementById('question-area');
+  area.innerHTML = `
+    <div class="question-number">Question ${currentQ + 1}</div>
+    <div class="question-text">${q.text}</div>
+    <div class="options" id="options-list">
+      ${q.options.map((opt, i) => `
+        <div class="option" onclick="selectOption(${i})" id="opt-${i}">
+          <div class="option-letter">${LETTERS[i]}</div>
+          <div class="option-text">${opt}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  document.getElementById('btn-next').disabled = true;
+
+  // restore previously selected if navigating back (not implemented, but defensive)
+}
+
+function selectOption(idx) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  document.getElementById('opt-' + idx).classList.add('selected');
+  answers[currentQ] = idx;
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderQuestion();
+    // scroll top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    // go to capture
+    document.getElementById('progress-fill').style.width = '100%';
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-capture').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function selectInvest(val) {
+  investAnswer = val;
+  document.getElementById('invest-yes').classList.toggle('selected', val === 'yes');
+  document.getElementById('invest-no').classList.toggle('selected', val === 'no');
+}
+
+function submitCapture() {
+  const name  = document.getElementById('field-name').value.trim();
+  const email = document.getElementById('field-email').value.trim();
+  const phone = document.getElementById('field-phone').value.trim();
+
+  if (!name || !email) {
+    alert('Please enter your name and email to continue.');
+    return;
+  }
+  if (!investAnswer) {
+    alert('Please answer the investment readiness question.');
+    return;
+  }
+
+  // Segment: weak vs strong
+  if (investAnswer === 'no') {
+    goTo('weak', null);
+    return;
+  }
+
+  // Build result copy based on answers
+  buildResult(name);
+  goTo('result', null);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildResult(name) {
+  // Simple scoring: index 0 = least severe, 3 = most severe
+  const severity = answers.reduce((acc, a) => acc + a, 0);
+  const max = questions.length * 3;
+  const pct = severity / max;
+
+  let title, subtitle, finding, cost, warning = '';
+
+  if (pct < 0.35) {
+    title = `${name}, You're Close —<br>But Something Is Leaking.`;
+    subtitle = "The gaps are subtle. That makes them more dangerous.";
+    finding = "Your assessment reveals pockets of internal friction that, while not yet critical, are quietly limiting your ceiling. You function well under normal conditions, but under pressure these patterns amplify — and the cost compounds over time.";
+    cost = "Leaders at your level often underestimate invisible leaks. The absence of crisis is not the presence of peak performance. There is a gap between where you operate and where you are capable of operating — and that gap has a price.";
+  } else if (pct < 0.65) {
+    title = `${name}, You Are Operating<br>Below Your Ceiling.`;
+    subtitle = "And the ceiling is not external.";
+    finding = "Your answers reveal a pattern common among high-performing leaders: the bottleneck is not strategy, not market, not team — it is internal. Unresolved decision fatigue, emotional overload, and cognitive noise are consuming the bandwidth you need to lead at your highest level.";
+    cost = "Every day you operate in this state, you are leaving decisions on the table, losing influence in the room, and slowly eroding the clarity that built your success. This is not a motivation problem. It is a system problem — and systems can be resolved.";
+  } else {
+    title = `${name}, The Block Is Real —<br>And It Is Running the Show.`;
+    subtitle = "What you feel is not a phase. It is a pattern.";
+    finding = "Your diagnostic reveals significant internal blocks across multiple dimensions — decision-making, emotional regulation, and cognitive clarity are all under strain. This is not weakness. This is what happens when high-achieving people push through without addressing the internal architecture that holds everything together.";
+    cost = "At this level of internal pressure, the risk is not gradual decline — it is rupture. Decisions made in this state carry compounded costs. Relationships suffer. Opportunities are missed not for lack of skill, but for lack of internal bandwidth.";
+    warning = `
+      <div class="warning-box">
+        <p><strong style="color:#d09090;">A direct note:</strong> The patterns you described are not resolved by more information, more strategy, or more effort. They require a specific kind of internal intervention — precise, private, and structured. Without it, performance may plateau or deteriorate regardless of external circumstances.</p>
+      </div>`;
+  }
+
+  document.getElementById('result-title').innerHTML = title;
+  document.getElementById('result-subtitle').textContent = subtitle;
+  document.getElementById('result-finding').textContent = finding;
+  document.getElementById('result-cost').textContent = cost;
+  document.getElementById('warning-area').innerHTML = warning;
+}
+</script>
+</body>
+</html>
